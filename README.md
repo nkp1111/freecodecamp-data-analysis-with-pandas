@@ -1,1 +1,5 @@
-# This projects is done following freeCodeCamp **Data Analysis with Pandas** certification
+# This projects is done following freeCodeCamp certification
+
+## Data Analysis with Pandas
+
+1. Mean-variance-standard-deviation-calculator
