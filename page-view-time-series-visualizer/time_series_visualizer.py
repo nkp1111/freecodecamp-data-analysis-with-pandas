@@ -31,15 +31,17 @@ def draw_bar_plot():
     df_bar["year"] = pd.DatetimeIndex(df_bar.index).year
     df_bar["month"] = pd.DatetimeIndex(df_bar.index).month
     df_bar = df_bar.groupby(["year", "month"], as_index=False).agg(
-        {"value": pd.Series.sum})
+        {"value": pd.Series.mean})
     print(df_bar.head())
     # Draw bar plot
     plt.figure(figsize=(8, 8))
 
-    fig = sns.barplot(data=df_bar, x=df_bar.year,
-                      y=df_bar.value, hue=df_bar.month)
+    fig = sns.barplot(data=df_bar, x=df_bar.year, y=df_bar.value,
+                      hue=df_bar.month, palette=sns.color_palette("tab10"))
 
-    plt.legend(loc="upper left")
+    plt.xlabel("Years")
+    plt.ylabel("Average Page Views")
+    plt.legend(loc="upper left", title="Months")
 
     # Save image and return fig (don't change this part)
     fig.figure.savefig('bar_plot.png')
