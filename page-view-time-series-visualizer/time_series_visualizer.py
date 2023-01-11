@@ -27,12 +27,22 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
-
+    df_bar = df.copy()
+    df_bar["year"] = pd.DatetimeIndex(df_bar.index).year
+    df_bar["month"] = pd.DatetimeIndex(df_bar.index).month
+    df_bar = df_bar.groupby(["year", "month"], as_index=False).agg(
+        {"value": pd.Series.sum})
+    print(df_bar.head())
     # Draw bar plot
+    plt.figure(figsize=(8, 8))
+
+    fig = sns.barplot(data=df_bar, x=df_bar.year,
+                      y=df_bar.value, hue=df_bar.month)
+
+    plt.legend(loc="upper left")
 
     # Save image and return fig (don't change this part)
-    fig.savefig('bar_plot.png')
+    fig.figure.savefig('bar_plot.png')
     return fig
 
 
