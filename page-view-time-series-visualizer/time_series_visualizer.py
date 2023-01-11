@@ -64,25 +64,35 @@ def draw_box_plot():
     df_box['year'] = [d.year for d in df_box.date]
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
-    df_box_yearly = df_box.groupby("year").agg({"value": pd.Series.sum})
-    df_box_monthly = df_box.groupby("month").agg({"value": pd.Series.sum})
+    months_sorted = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    fig, axes = plt.subplots(figsize=(8, 6))
-    sns.boxplot(data=df_box_yearly, x=df_box_yearly.index,
-                y=df_box_yearly.value)
+    df_box.month = pd.Categorical(
+        df_box.month, categories=months_sorted, ordered=True)
+
+    df_box = df_box.sort_values("month")
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 6))
+    sns.boxplot(data=df_box,
+                x=df_box.year,
+                y=df_box.value,
+                orient="v",
+                ax=ax1)
 
     # Draw box plots (using Seaborn)
-    axes.set_title("Year-wise Box Plot (Trend)")
-    axes.set_xlabel("Years")
-    axes.set_ylabel("Page Views")
+    ax1.set_title("Year-wise Box Plot (Trend)")
+    ax1.set_xlabel("Year")
+    ax1.set_ylabel("Page Views")
 
-    sns.boxplot(data=df_box_monthly,
-                x=df_box_monthly.index,
-                y=df_box_monthly.value)
+    sns.boxplot(data=df_box,
+                x=df_box.month,
+                y=df_box.value,
+                orient="v",
+                ax=ax2)
 
-    axes.set_title("Month-wise Box Plot (Seasonality)")
-    axes.set_xlabel("Months")
-    axes.set_ylabel("Page Views")
+    ax2.set_title("Month-wise Box Plot (Seasonality)")
+    ax2.set_xlabel("Month")
+    ax2.set_ylabel("Page Views")
 
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
